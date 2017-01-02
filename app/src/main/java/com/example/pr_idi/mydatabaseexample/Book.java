@@ -4,7 +4,7 @@ package com.example.pr_idi.mydatabaseexample;
  * Book
  * Created by pr_idi on 10/11/16.
  */
-public class Book {
+public class Book extends Object {
 
     // Basic book data manipulation class
     // Contains basic information on the book

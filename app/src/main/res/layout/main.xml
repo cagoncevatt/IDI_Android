@@ -23,6 +23,14 @@
             android:text="Delete First"
             android:onClick="onClick"/>
 
+        <Button
+            android:id="@+id/catList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PH - Books by Category"
+            android:onClick="onClick"
+            android:textSize="10sp"/>
+
     </LinearLayout>
 
     <ListView

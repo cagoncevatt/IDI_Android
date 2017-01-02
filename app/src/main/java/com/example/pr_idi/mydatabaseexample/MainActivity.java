@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -43,7 +44,7 @@ public class MainActivity extends ListActivity {
                 String[] newBook = new String[] { "Miguel Strogoff", "Jules Verne", "Ulysses", "James Joyce", "Don Quijote", "Miguel de Cervantes", "Metamorphosis", "Kafka" };
                 int nextInt = new Random().nextInt(4);
                 // save the new book to the database
-                book = bookData.createBook(newBook[nextInt*2], newBook[nextInt*2 + 1]);
+                book = bookData.createBook(newBook[nextInt*2], newBook[nextInt*2 + 1], "asd", 2000, "F", "RegExp");
 
                 // After I get the book data, I add it to the adapter
                 adapter.add(book);
@@ -54,6 +55,10 @@ public class MainActivity extends ListActivity {
                     bookData.deleteBook(book);
                     adapter.remove(book);
                 }
+                break;
+            case R.id.catList:
+                Intent intent = new Intent(this, BooksByCategoryActivity.class);
+                startActivity(intent);
                 break;
         }
         adapter.notifyDataSetChanged();

@@ -5,6 +5,8 @@ package com.example.pr_idi.mydatabaseexample;
  * Created by pr_idi on 10/11/16.
  */
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -14,7 +16,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class BookData {
+public final class BookData {
+
+    // Instance
+    private static BookData mBookDataInst = null;
 
     // Database fields
     private SQLiteDatabase database;
@@ -24,10 +29,17 @@ public class BookData {
 
     // Here we only select Title and Author, must select the appropriate columns
     private String[] allColumns = { MySQLiteHelper.COLUMN_ID,
-            MySQLiteHelper.COLUMN_TITLE, MySQLiteHelper.COLUMN_AUTHOR};
+            MySQLiteHelper.COLUMN_TITLE, MySQLiteHelper.COLUMN_AUTHOR,
+            MySQLiteHelper.COLUMN_PUBLISHER, MySQLiteHelper.COLUMN_YEAR,
+            MySQLiteHelper.COLUMN_CATEGORY, MySQLiteHelper.COLUMN_PERSONAL_EVALUATION };
 
     public BookData(Context context) {
         dbHelper = new MySQLiteHelper(context);
+        mBookDataInst = this;
+    }
+
+    public static BookData GetInstance() {
+        return mBookDataInst;
     }
 
     public void open() throws SQLException {
@@ -38,7 +50,7 @@ public class BookData {
         dbHelper.close();
     }
 
-    public Book createBook(String title, String author) {
+    public Book createBook(String title, String author, String publisher, int year, String category, String pe) {
         ContentValues values = new ContentValues();
         Log.d("Creating", "Creating " + title + " " + author);
 
@@ -46,12 +58,10 @@ public class BookData {
         // Must modify the method to add the full data
         values.put(MySQLiteHelper.COLUMN_TITLE, title);
         values.put(MySQLiteHelper.COLUMN_AUTHOR, author);
-
-        // Invented data
-        values.put(MySQLiteHelper.COLUMN_PUBLISHER, "Do not know");
-        values.put(MySQLiteHelper.COLUMN_YEAR, 2030);
-        values.put(MySQLiteHelper.COLUMN_CATEGORY, "Fantasia");
-        values.put(MySQLiteHelper.COLUMN_PERSONAL_EVALUATION, "regular");
+        values.put(MySQLiteHelper.COLUMN_PUBLISHER, publisher);
+        values.put(MySQLiteHelper.COLUMN_YEAR, year);
+        values.put(MySQLiteHelper.COLUMN_CATEGORY, category);
+        values.put(MySQLiteHelper.COLUMN_PERSONAL_EVALUATION, pe);
 
         // Actual insertion of the data using the values variable
         long insertId = database.insert(MySQLiteHelper.TABLE_BOOKS, null,
@@ -100,11 +110,36 @@ public class BookData {
         return books;
     }
 
+    public List<Book> getAllBooksByCategory() {
+        List<Book> books = getAllBooks();
+
+        Collections.sort(books, new CategoryComparator());
+
+        return books;
+    }
+
     private Book cursorToBook(Cursor cursor) {
         Book book = new Book();
         book.setId(cursor.getLong(0));
         book.setTitle(cursor.getString(1));
         book.setAuthor(cursor.getString(2));
+        book.setCategory(cursor.getString(5));
         return book;
+    }
+}
+
+class CategoryComparator implements Comparator<Book> {
+    @Override
+    public int compare(Book a, Book b) {
+        if (a == null)
+            return 1;
+        else if (a.getCategory() == null)
+            return 1;
+        else if (b == null)
+            return -1;
+        else if (b.getCategory() == null)
+            return -1;
+        else
+            return a.getCategory().compareTo(b.getCategory());
     }
 }

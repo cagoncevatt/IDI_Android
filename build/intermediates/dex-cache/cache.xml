@@ -2,40 +2,67 @@
 <items version="2" >
 
     <item
-        is-multidex="false"
-        jar="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.1\jars\classes.jar"
+        jumboMode="true"
         optimize="true"
         revision="22.0.1"
-        sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\pre-dexed\debug\com.android.support-support-v4-22.2.1_bdc2c7d8e377b2a2656514e9766d6e43bfea27ab.jar" />
+        sha1="3abb4b88f5a8a0584a9b01d3170d7165f12f8588">
+        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-recyclerview-v7-22.2.1_301f2398ab70703d565251eb6c7d7d0c2478e83d\classes.dex" />
     </item>
     <item
-        is-multidex="false"
+        is-multidex="true"
         jar="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="22.0.1"
         sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
-        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-22.2.1_ae15ee79684a8f4d822dc64004ea29977872430a.jar" />
+        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-22.2.1_ae15ee79684a8f4d822dc64004ea29977872430a\classes.dex" />
     </item>
     <item
-        is-multidex="false"
-        jar="C:\Users\Ale\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
-        jumboMode="false"
+        is-multidex="true"
+        jar="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
         optimize="true"
         revision="22.0.1"
-        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.1_027d55d427df1775e02223211f93a737588a3d5e.jar" />
+        sha1="06f12315282f50dc151c5d03894b7423175ed354">
+        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_fd96c4200f554d3cea5401724ebfe855d66c4adc\classes.dex" />
     </item>
     <item
-        is-multidex="false"
+        is-multidex="true"
+        jar="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="5a9024b93e86774f64490a367a5e8c38ee7b06db">
+        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_a863c1571a3d3271ee1ef39cd6d8ea832a89fc61\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
-        jumboMode="false"
+        jumboMode="true"
         optimize="true"
         revision="22.0.1"
         sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.1_fdcad58cf2d6573a2058f139d6f4ee746dccd878.jar" />
+        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-22.2.1_fdcad58cf2d6573a2058f139d6f4ee746dccd878\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Ale\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-22.2.1_027d55d427df1775e02223211f93a737588a3d5e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="22.0.1"
+        sha1="f8efd0096475e0daf054267b61544e10dc776503">
+        <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-22.2.1_bdc2c7d8e377b2a2656514e9766d6e43bfea27ab\classes.dex" />
     </item>
 
 </items>

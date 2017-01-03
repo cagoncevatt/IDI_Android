@@ -16,10 +16,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public final class BookData {
-
-    // Instance
-    private static BookData mBookDataInst = null;
+public class BookData {
 
     // Database fields
     private SQLiteDatabase database;
@@ -35,11 +32,6 @@ public final class BookData {
 
     public BookData(Context context) {
         dbHelper = new MySQLiteHelper(context);
-        mBookDataInst = this;
-    }
-
-    public static BookData GetInstance() {
-        return mBookDataInst;
     }
 
     public void open() throws SQLException {
@@ -54,8 +46,6 @@ public final class BookData {
         ContentValues values = new ContentValues();
         Log.d("Creating", "Creating " + title + " " + author);
 
-        // Add data: Note that this method only provides title and author
-        // Must modify the method to add the full data
         values.put(MySQLiteHelper.COLUMN_TITLE, title);
         values.put(MySQLiteHelper.COLUMN_AUTHOR, author);
         values.put(MySQLiteHelper.COLUMN_PUBLISHER, publisher);
@@ -67,20 +57,34 @@ public final class BookData {
         long insertId = database.insert(MySQLiteHelper.TABLE_BOOKS, null,
                 values);
 
+
+
+        // All the data is already available, this query is not necessary
+
         // Main activity calls this procedure to create a new book
         // and uses the result to update the listview.
         // Therefore, we need to get the data from the database
         // (you can use this as a query example)
         // to feed the view.
 
-        Cursor cursor = database.query(MySQLiteHelper.TABLE_BOOKS,
+        /*Cursor cursor = database.query(MySQLiteHelper.TABLE_BOOKS,
                 allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
                 null, null, null);
         cursor.moveToFirst();
-        Book newBook = cursorToBook(cursor);
+        Book newBook = cursorToBook(cursor);*/
 
         // Do not forget to close the cursor
-        cursor.close();
+        //cursor.close();
+
+        Book newBook = new Book();
+
+        newBook.setId(insertId);
+        newBook.setTitle(title);
+        newBook.setAuthor(author);
+        newBook.setPublisher(publisher);
+        newBook.setYear(year);
+        newBook.setCategory(category);
+        newBook.setPersonal_evaluation(pe);
 
         // Return the book
         return newBook;
@@ -111,9 +115,40 @@ public final class BookData {
     }
 
     public List<Book> getAllBooksByCategory() {
-        List<Book> books = getAllBooks();
+        List<Book> books = new ArrayList<>();
 
-        Collections.sort(books, new CategoryComparator());
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_BOOKS,
+                allColumns, null, null, null, MySQLiteHelper.COLUMN_CATEGORY, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Book book = cursorToBook(cursor);
+            books.add(book);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return books;
+    }
+
+    public List<Book> getBooksOfCategory(String category) {
+        List<Book> books = new ArrayList<Book>();
+
+        Cursor cursor = database.query(MySQLiteHelper.TABLE_BOOKS,
+                allColumns, MySQLiteHelper.COLUMN_CATEGORY
+                        + " = " + category, null, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Book book = cursorToBook(cursor);
+            books.add(book);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
 
         return books;
     }
@@ -123,23 +158,10 @@ public final class BookData {
         book.setId(cursor.getLong(0));
         book.setTitle(cursor.getString(1));
         book.setAuthor(cursor.getString(2));
+        book.setPublisher(cursor.getString(3));
+        book.setYear(cursor.getInt(4));
         book.setCategory(cursor.getString(5));
+        book.setPersonal_evaluation(cursor.getString(6));
         return book;
-    }
-}
-
-class CategoryComparator implements Comparator<Book> {
-    @Override
-    public int compare(Book a, Book b) {
-        if (a == null)
-            return 1;
-        else if (a.getCategory() == null)
-            return 1;
-        else if (b == null)
-            return -1;
-        else if (b.getCategory() == null)
-            return -1;
-        else
-            return a.getCategory().compareTo(b.getCategory());
     }
 }

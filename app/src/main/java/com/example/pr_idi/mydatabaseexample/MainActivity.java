@@ -6,13 +6,13 @@ import java.util.Random;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-public class MainActivity extends FragmentActivity /*ListActivity*/ {
+public class MainActivity extends AppCompatActivity /*ListActivity*/ {
     private BookData bookData;
 
     @Override

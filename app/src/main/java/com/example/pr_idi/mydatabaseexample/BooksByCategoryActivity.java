@@ -1,24 +1,34 @@
 package com.example.pr_idi.mydatabaseexample;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // RecyclerView basic guide: https://guides.codepath.com/android/Using-the-RecyclerView
+// "Complex" RecyclerView guide: https://guides.codepath.com/android/Heterogenous-Layouts-inside-RecyclerView
 
-public class BooksByCategoryActivity extends AppCompatActivity {
+public class BooksByCategoryActivity extends Fragment {
     private BookData mBookData;
     private RecyclerView mRV;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.activity_books_by_category, container, false);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_books_by_category);
 
         mBookData = BookData.GetInstance();
         mBookData.open();
@@ -43,25 +53,26 @@ public class BooksByCategoryActivity extends AppCompatActivity {
 
         // Working with a Recycler View
         // Lookup the recyclerview in activity layout
-        mRV = (RecyclerView)findViewById(R.id.BooksRV);
+        Activity act = getActivity();
+        mRV = (RecyclerView) act.findViewById(R.id.BooksRV);
 
         // Create adapter passing in the sample user data
-        BookRVAdapter adapter = new BookRVAdapter(this, values); // Need to change something, maybe organize the books in sub-lists -> TO THINK
+        BookRVAdapter adapter = new BookRVAdapter(act, values); // Need to change something, maybe organize the books in sub-lists -> TO THINK
 
         // Attach the adapter to the recyclerview to populate items
         mRV.setAdapter(adapter);
 
         // Set layout manager to position the items
-        mRV.setLayoutManager(new LinearLayoutManager(this));
+        mRV.setLayoutManager(new LinearLayoutManager(act));
 
         // Should use the same adapter as above but sorting the list based on category?
         // Or can do something like "sub-lists" to contain each category?
     }
 
 
-    // Life cycle methods. Check whether it is necessary to reimplement them
+    /*// Life cycle methods. Check whether it is necessary to reimplement them
     @Override
-    protected void onResume() {
+    public void onResume() {
         mBookData.open();
         super.onResume();
     }
@@ -69,8 +80,8 @@ public class BooksByCategoryActivity extends AppCompatActivity {
     // Life cycle methods. Check whether it is necessary to reimplement them
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         mBookData.close();
         super.onPause();
-    }
+    }*/
 }

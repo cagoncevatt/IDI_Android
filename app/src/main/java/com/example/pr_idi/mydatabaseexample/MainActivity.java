@@ -4,13 +4,15 @@ package com.example.pr_idi.mydatabaseexample;
 import java.util.List;
 import java.util.Random;
 
-import android.app.ListActivity;
-import android.content.Intent;
+import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends FragmentActivity /*ListActivity*/ {
     private BookData bookData;
 
     @Override
@@ -27,7 +29,7 @@ public class MainActivity extends ListActivity {
         // elements in a ListView
         ArrayAdapter<Book> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+        //setListAdapter(adapter);
     }
 
     // Basic method to add pseudo-random list of books so that
@@ -37,7 +39,7 @@ public class MainActivity extends ListActivity {
     // of the buttons in main.xml
     public void onClick(View view) {
         @SuppressWarnings("unchecked")
-        ArrayAdapter<Book> adapter = (ArrayAdapter<Book>) getListAdapter();
+        //ArrayAdapter<Book> adapter = (ArrayAdapter<Book>) getListAdapter();
         Book book;
         switch (view.getId()) {
             case R.id.add:
@@ -47,25 +49,34 @@ public class MainActivity extends ListActivity {
                 book = bookData.createBook(newBook[nextInt*2], newBook[nextInt*2 + 1], "asd", 2000, "F", "RegExp");
 
                 // After I get the book data, I add it to the adapter
-                adapter.add(book);
+                //adapter.add(book);
                 break;
             case R.id.delete:
-                if (getListAdapter().getCount() > 0) {
+                /*if (getListAdapter().getCount() > 0) {
                     book = (Book) getListAdapter().getItem(0);
                     bookData.deleteBook(book);
                     adapter.remove(book);
-                }
+                }*/
                 break;
             case R.id.catList:
-                Intent intent = new Intent(this, BooksByCategoryActivity.class);
-                startActivity(intent);
+                // For the momento is only implemented de show (the list is initially hidden and doesn't update yet)
+                FragmentManager mgr = getFragmentManager();
+                Fragment frag = mgr.findFragmentById(R.id.fragmentBooksByCategory);
+
+                FragmentTransaction ft = mgr.beginTransaction();
+                ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                ft.show(frag);
+                ft.commit();
                 break;
         }
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
+    }
+
+    public BookData GetBookData() {
+        return bookData;
     }
 
     // Life cycle methods. Check whether it is necessary to reimplement them
-
     @Override
     protected void onResume() {
         bookData.open();

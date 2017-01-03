@@ -25,7 +25,7 @@
         jumboMode="true"
         optimize="true"
         revision="22.0.1"
-        sha1="06f12315282f50dc151c5d03894b7423175ed354">
+        sha1="5444d9663c41edc85af8863af57942b7d79facd4">
         <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_fd96c4200f554d3cea5401724ebfe855d66c4adc\classes.dex" />
     </item>
     <item
@@ -34,7 +34,7 @@
         jumboMode="true"
         optimize="true"
         revision="22.0.1"
-        sha1="5a9024b93e86774f64490a367a5e8c38ee7b06db">
+        sha1="9ecef6275ce19c09c147c7eaae23090ef05bbd34">
         <dex dex="C:\Users\Ale\Desktop\Trabajo\UPC\IDI\Android\MyBookDatabase\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_a863c1571a3d3271ee1ef39cd6d8ea832a89fc61\classes.dex" />
     </item>
     <item

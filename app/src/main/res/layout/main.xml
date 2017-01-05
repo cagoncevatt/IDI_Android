@@ -1,51 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinatorLayoutAddBook"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/add"
+        <LinearLayout
+            android:id="@+id/group"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add New"
-            android:onClick="onClick"/>
+            android:layout_height="wrap_content" >
 
-        <Button
-            android:id="@+id/delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete First"
-            android:onClick="onClick"/>
+            <Button
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add New"
+                android:onClick="onClick"/>
 
-        <Button
-            android:id="@+id/catList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PH - Books by Category"
-            android:onClick="onClick"
-            android:textSize="10sp"/>
+            <Button
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete First"
+                android:onClick="onClick"/>
 
+            <Button
+                android:id="@+id/catList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PH - Books by Category"
+                android:onClick="onClick"
+                android:textSize="10sp"/>
+
+        </LinearLayout>
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.example.pr_idi.mydatabaseexample.AddBookFragment"
+            android:tag="AddBook"
+            android:id="@+id/fragmentAddBook" />
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.example.pr_idi.mydatabaseexample.BooksByCategoryFragment"
+            android:tag="BookListByCategory"
+            android:id="@+id/fragmentBooksByCategory"
+            tools:layout="@layout/fragment_books_by_category" />
     </LinearLayout>
 
-    <ListView
-        android:id="@android:id/list"
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:src="@android:drawable/ic_input_add"
+        android:id="@+id/floatingActionButtonAdd"
+        android:tint="@android:color/white"
+        android:layout_gravity="end|bottom"
+        android:onClick='registerBook'
+        android:layout_marginTop="@dimen/abc_dialog_list_padding_vertical_material"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="@dimen/abc_action_bar_default_padding_material"
+        app:backgroundTint="?attr/actionModeSplitBackground"
+        android:visibility="invisible" />
 
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="layout.BooksByCategoryFragment"
-        android:tag="BookListByCategory"
-        android:id="@+id/fragmentBooksByCategory"
-        tools:layout="@layout/fragment_books_by_category" />
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package layout;
+package com.example.pr_idi.mydatabaseexample;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -43,7 +43,6 @@ public class BooksByCategoryFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Don't make try-catch because this cast should always be correct (this fragment is made to only be usable under the MainActivity class)
         MainActivity act = (MainActivity)getActivity();
 
         mBookData = act.GetBookData();

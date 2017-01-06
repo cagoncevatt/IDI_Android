@@ -97,6 +97,12 @@ public class BookData {
                 + " = " + id, null);
     }
 
+    public void deleteBook(long id) {
+        System.out.println("Book deleted with id: " + id);
+        database.delete(MySQLiteHelper.TABLE_BOOKS, MySQLiteHelper.COLUMN_ID
+                + " = " + id, null);
+    }
+
     public List<Book> getAllBooks() {
         List<Book> books = new ArrayList<>();
 

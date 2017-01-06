@@ -9,5 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/categoryTextView"
         android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:drawableStart="@android:drawable/sym_contact_card"
+        android:layout_marginStart="@dimen/abc_action_bar_default_padding_material" />
 </LinearLayout>

@@ -19,7 +19,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public final static String ADD_BOOK_BUTTON = "AddBook_FloatingButton";
@@ -61,13 +63,9 @@ public class MainActivity extends AppCompatActivity {
         Book book;
         switch (view.getId()) {
             case R.id.add: {
-                //String[] newBook = new String[] { "Miguel Strogoff", "Jules Verne", "Ulysses", "James Joyce", "Don Quijote", "Miguel de Cervantes", "Metamorphosis", "Kafka" };
-                //int nextInt = new Random().nextInt(4);
-                // save the new book to the database
-                //book = bookData.createBook(newBook[nextInt*2], newBook[nextInt*2 + 1], "asd", 2000, "F", "RegExp");
+                // PH for title! | When going back should have a way to know which title was there previous to this or depending on fragment to show...
+                setTitle("Register a New Book");
 
-                // After I get the book data, I add it to the adapter
-                //adapter.add(book);
                 FragmentManager mgr = getFragmentManager();
                 Fragment frag = mgr.findFragmentById(R.id.fragmentAddBook);
 
@@ -105,20 +103,127 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void registerBook(View view) {
-        String result = addBook();
+        String res = "";
 
-        String res[] = result.split("|");
+        // Check fields
+        final MainActivity inst = this;
+        final EditText publisherET, catET, authorET, titleET, yearET;
+        final String title, author, publisher, persEval, category, yearS;
+        int year = -1;
 
-        if (!res[0].equals("OK")) {
-            // Use Toast here to make msg
-            System.out.println("ERROR");// Error msg is in result
+        publisherET = (EditText)findViewById(R.id.editTextPublisher);
+        catET = (EditText)findViewById(R.id.editTextCategory);
+        authorET = (EditText)findViewById(R.id.editTextAuthor);
+        titleET = (EditText)findViewById(R.id.editTextTitle);
+        yearET = (EditText)findViewById(R.id.editTextYear);
+
+        publisher = publisherET.getText().toString();
+        persEval = ((TextView)findViewById(R.id.textViewPersonalEvaluation)).getText().toString();
+        category = catET.getText().toString();
+        author = authorET.getText().toString();
+        title = titleET.getText().toString();
+
+        if (title.isEmpty())
+                res += "> Error: Missing Title.";
+
+        yearS = yearET.getText().toString();
+
+        if (yearS.isEmpty()) {
+            if (res.isEmpty())
+                res += "> Error: Missing Year.";
+            else
+                res += "\n> Error: Missing Year.";
         }
         else {
+            year = Integer.parseInt(yearS);
+
+            if (year > Calendar.getInstance().get(Calendar.YEAR)) {
+                if (res.isEmpty())
+                    res += "> Error: Invalid Year. Must be lesser or equal than current year.";
+                else
+                    res += "\n> Error: Invalid Year. Must be lesser or equal than current year.";
+            }
+        }
+
+        if (res.isEmpty()) {
+            final RatingBar peRB = (RatingBar) findViewById(R.id.ratingBarPersonalEvaluation);
+            String auxAuth, auxPublisher;
+
+            if (author.isEmpty())
+                auxAuth = "Unknown Author";
+            else
+                auxAuth = author;
+
+            if (publisher.isEmpty())
+                auxPublisher = "Unknown Publisher";
+            else
+                auxPublisher = publisher;
+
+            final Book b = bookData.createBook(title, auxAuth, auxPublisher, year, category, persEval);
+
+            // Clear all fields
+            peRB.setRating(3.0f);
+            publisherET.setText("");
+            authorET.setText("");
+            titleET.setText("");
+            catET.setText("");
+            yearET.setText("");
+
+            // Snackbar with Undo action
             Snackbar snackbar = Snackbar
-                    .make(findViewById(R.id.coordinatorLayoutAddBook), res[2] + " - Registered.", Snackbar.LENGTH_INDEFINITE)
+                    .make(findViewById(R.id.coordinatorLayoutAddBook), title + " has been registered.", Snackbar.LENGTH_INDEFINITE)
                     .setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            bookData.deleteBook(b.getId());
+                            Toast.makeText(inst, b.getTitle() + " has been removed.", Toast.LENGTH_LONG).show();
+
+                            // Snackbar with Undo action
+                            Snackbar snackbar = Snackbar
+                                    .make(findViewById(R.id.coordinatorLayoutAddBook),"Refill fields with previous data?", Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("YES", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            // Clear all fields
+
+                                            switch (persEval) {
+                                                case "Very Bad":
+                                                    peRB.setRating(1.0f);
+                                                    break;
+
+                                                case "Bad":
+                                                    peRB.setRating(2.0f);
+                                                    break;
+
+                                                case "Regular":
+                                                    peRB.setRating(3.0f);
+                                                    break;
+
+                                                case "Good":
+                                                    peRB.setRating(4.0f);
+                                                    break;
+
+                                                case "Very Good":
+                                                    peRB.setRating(5.0f);
+                                                    break;
+                                            }
+
+                                            publisherET.setText(publisher);
+                                            authorET.setText(author);
+                                            titleET.setText(title);
+                                            catET.setText(category);
+                                            yearET.setText(yearS);
+                                        }
+                                    });
+
+                            // Changing message text color
+                            snackbar.setActionTextColor(Color.LTGRAY);
+
+                            // Changing action button text color
+                            View sbView = snackbar.getView();
+                            TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                            textView.setTextColor(Color.WHITE);
+                            snackbar.show();
                         }
                     });
 
@@ -128,52 +233,11 @@ public class MainActivity extends AppCompatActivity {
             // Changing action button text color
             View sbView = snackbar.getView();
             TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            textView.setTextColor(Color.GREEN);
-
+            textView.setTextColor(Color.WHITE);
             snackbar.show();
-
-            // Clear fragment views inputs
         }
-    }
-
-    public String addBook() {
-        String res = "";
-
-        // Check fields
-        String title, author, publisher, persEval, category, yearS;
-        int year;
-
-        publisher = ((EditText)findViewById(R.id.editTextPublisher)).getText().toString();
-        persEval = ((TextView)findViewById(R.id.textViewPersonalEvaluation)).getText().toString();
-        category = ((EditText)findViewById(R.id.editTextCategory)).getText().toString();
-        author = ((EditText)findViewById(R.id.editTextAuthor)).getText().toString();
-
-        title = ((EditText)findViewById(R.id.editTextTitle)).getText().toString();
-
-        if (title.isEmpty())
-            res += "- Error title empty\n";
-
-        yearS = ((EditText)findViewById(R.id.editTextYear)).getText().toString();
-
-        if (yearS.isEmpty()) {
-            res += "- Error missing year\n";
-            year = -1;
-        }
-        else {
-            year = Integer.parseInt(yearS);
-
-            if (year > Calendar.getInstance().get(Calendar.YEAR))
-                res += "- Error invalid year\n";
-        }
-
-        if (res.isEmpty()) {
-            Book b = bookData.createBook(title, author, publisher, year, category, persEval);
-
-            res += "OK|";
-            res += b.getId() + "|" + b.getTitle();
-        }
-
-        return res;
+        else
+            Toast.makeText(inst, res, Toast.LENGTH_LONG).show();
     }
 
     public BookData GetBookData() {

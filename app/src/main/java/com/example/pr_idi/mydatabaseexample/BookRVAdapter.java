@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Ale on 01/01/2017.
@@ -25,6 +26,18 @@ public class BookRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public BookRVAdapter(Context context, List<Object> items) {
         this.mElems = items;
         mContext = context;
+    }
+
+    public void SetElements(List<Object> elems) {
+        mElems = elems;
+    }
+
+    public int GetIndexOfElement(Object obj) {
+        return mElems.indexOf(obj);
+    }
+
+    public List<Object> GetElements() {
+        return mElems;
     }
 
     // Easy access to the context object in the recyclerview
@@ -85,8 +98,11 @@ public class BookRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Book book = (Book) mElems.get(position);
 
                 if (book != null) {
-                    bh.SetText(book.getTitle() + " by " + book.getAuthor());
-                    bh.SetId(book.getId());
+                    bh.SetText(book.getTitle());
+                    bh.SetBook(book);
+
+                    //bh.SetBook(book); // Sets the book of the view
+                    //bh.FillData(); // Makes the holder fill all the data based on its current book
                 }
                 // The button remain unchanged for now
                 break;

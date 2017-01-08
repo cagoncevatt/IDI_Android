@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/editbox_dropdown_light_frame"
+    android:layout_marginTop="2dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/abc_action_bar_overflow_padding_start_material"
+        android:drawableStart="@android:drawable/sym_contact_card"
+        android:id="@+id/cardDrawableTextView" />
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
@@ -10,6 +22,5 @@
         android:id="@+id/categoryTextView"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:drawableStart="@android:drawable/sym_contact_card"
-        android:layout_marginStart="@dimen/abc_action_bar_default_padding_material" />
+        android:layout_marginStart="@dimen/abc_action_bar_overflow_padding_start_material" />
 </LinearLayout>

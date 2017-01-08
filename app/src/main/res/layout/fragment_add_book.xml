@@ -14,6 +14,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:src="@android:drawable/ic_delete"
+                android:id="@+id/imageButtonClearFields"
+                android:layout_gravity="end"
+                android:onClick="resetAddFields"
+                android:background="@android:drawable/editbox_background"
+                android:layout_marginEnd="@dimen/abc_action_bar_default_padding_material"
+                android:layout_marginTop="@dimen/abc_control_corner_material"
+                android:layout_marginBottom="2dp"
+                android:layout_height="32dp" />
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -24,8 +36,7 @@
                 android:textSize="18sp"
                 android:layout_marginStart="@dimen/abc_action_bar_default_padding_material"
                 android:layout_marginEnd="@dimen/abc_action_bar_default_padding_material"
-                android:hint="Title (Required)"
-                android:layout_marginTop="@dimen/abc_dialog_list_padding_vertical_material" />
+                android:hint="Title (Required)" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -84,9 +95,10 @@
                 android:rating="3.0"
                 android:stepSize="1"
                 android:progressTint="@color/colorStars"
-                android:minHeight="57dp"
-                android:maxHeight="57dp"
-                android:layout_marginStart="@dimen/abc_action_bar_default_padding_material" />
+                android:minHeight="45dp"
+                android:maxHeight="45dp"
+                android:layout_marginStart="@dimen/abc_action_bar_default_padding_material"
+                android:layout_marginBottom="@dimen/abc_control_corner_material" />
 
             <TextView
                 android:text="Regular"

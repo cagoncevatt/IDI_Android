@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Ale on 01/01/2017.
@@ -12,7 +13,7 @@ import android.widget.TextView;
 public class BookViewHolder extends RecyclerView.ViewHolder {
     private TextView titleTextView;
     private Button addButton;
-    private long mId;
+    private Book mBook;
 
     BookViewHolder(View itemView) {
         super(itemView);
@@ -21,8 +22,8 @@ public class BookViewHolder extends RecyclerView.ViewHolder {
         addButton = (Button) itemView.findViewById(R.id.add_button);
     }
 
-    public void SetId(long id) {
-        mId = id;
+    public void SetBook(Book b) {
+        mBook = b;
     }
 
     public void SetText(String txt) {
@@ -33,8 +34,8 @@ public class BookViewHolder extends RecyclerView.ViewHolder {
         titleTextView = tv;
     }
 
-    public long GetId() {
-        return mId;
+    public Book GetBook() {
+        return mBook;
     }
 
     public String GetText() {

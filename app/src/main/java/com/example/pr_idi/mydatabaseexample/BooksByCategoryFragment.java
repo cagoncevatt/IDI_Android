@@ -9,11 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pr_idi.mydatabaseexample.Book;
-import com.example.pr_idi.mydatabaseexample.BookData;
-import com.example.pr_idi.mydatabaseexample.BookRVAdapter;
-import com.example.pr_idi.mydatabaseexample.MainActivity;
-import com.example.pr_idi.mydatabaseexample.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,29 +39,11 @@ public class BooksByCategoryFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         MainActivity act = (MainActivity)getActivity();
-
         mBookData = act.GetBookData();
 
         if (mBookData != null) {
-            mBookData.open();
-
             List<Book> books = mBookData.getAllBooksByCategory();
-            List<Object> values = new ArrayList<>();
-
-            if (!books.isEmpty()) {
-                String cat = "";
-
-                for (int i = 0; i < books.size(); ++i) {
-                    Book b = books.get(i);
-
-                    if (!cat.equals(b.getCategory())) {
-                        cat = b.getCategory();
-                        values.add(cat);
-                    }
-
-                    values.add(b);
-                }
-            }
+            List<Object> values = mBookData.CreateListByCategory();
 
             // Working with a Recycler View
             // Lookup the recyclerview in activity layout
@@ -88,5 +65,9 @@ public class BooksByCategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_books_by_category, container, false);
+    }
+
+    public RecyclerView GetRecyclerView() {
+        return mRV;
     }
 }

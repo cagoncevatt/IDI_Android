@@ -97,6 +97,34 @@ public class BookData {
                 + " = " + id, null);
     }
 
+    public void deleteBooks(List<Book> books) {
+        int comaCount = 0;
+        String inClause = "(";
+
+        for (Book b : books) {
+            inClause += b.getId();
+            comaCount++;
+
+            if (comaCount == books.size())
+                inClause += ")";
+            else
+                inClause +=", ";
+        }
+
+        database.delete(MySQLiteHelper.TABLE_BOOKS, MySQLiteHelper.COLUMN_ID + " IN " + inClause, null);
+    }
+
+    public void createBooks(List<Book> books) {
+        database.beginTransaction();
+
+        for (Book b : books) {
+            Book nB = createBook(b.getTitle(), b.getAuthor(), b.getPublisher(), b.getYear(), b.getCategory(), b.getPersonal_evaluation());
+            b = nB;
+        }
+
+        database.endTransaction();
+    }
+
     public void deleteBook(long id) {
         System.out.println("Book deleted with id: " + id);
         database.delete(MySQLiteHelper.TABLE_BOOKS, MySQLiteHelper.COLUMN_ID
@@ -157,6 +185,32 @@ public class BookData {
         cursor.close();
 
         return books;
+    }
+
+    public List<Object> CreateListByCategory() {
+        List<Book> books = getAllBooksByCategory();
+        List<Object> values = new ArrayList<>();
+        values.add("No-category");
+
+        if (!books.isEmpty()) {
+            String cat = "";
+
+            for (int i = 0; i < books.size(); ++i) {
+                Book b = books.get(i);
+
+                if (!cat.equals(b.getCategory())) {
+                    if (i == 0)
+                        values.clear();
+
+                    cat = b.getCategory();
+                    values.add(cat);
+                }
+
+                values.add(b);
+            }
+        }
+
+        return values;
     }
 
     private Book cursorToBook(Cursor cursor) {

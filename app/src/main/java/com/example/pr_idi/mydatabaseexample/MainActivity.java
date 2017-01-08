@@ -1,12 +1,14 @@
 package com.example.pr_idi.mydatabaseexample;
 
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -14,6 +16,7 @@ import android.app.FragmentTransaction;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,6 +28,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public final static String ADD_BOOK_BUTTON = "AddBook_FloatingButton";
+    public final static String SHARED_PREFERENCE_KEY = "MyBookDatabase_SharedPreference";
+    public final static String SHARED_PREFERENCE_FIRST_RUN = "SharedPreference_AppFirstRun";
 
     private BookData bookData;
 
@@ -33,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        SharedPreferences pref = getSharedPreferences(SHARED_PREFERENCE_KEY, MODE_PRIVATE);
+        bookData = new BookData(this);
+
+        bookData.open();
+
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean(ADD_BOOK_BUTTON)) {
                 View addButton = findViewById(R.id.floatingActionButtonAdd);
@@ -40,8 +50,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        bookData = new BookData(this);
-        bookData.open();
+        if (pref.getBoolean(SHARED_PREFERENCE_FIRST_RUN, true)) {
+
+            bookData.createBook("El dios asesinado en el servicio de caballeros", "Sergio S. Morán", "Fantascy", 2016, "Fantasy", "Good");
+            bookData.createBook("World of Warcraft: Arthas: Rise of the Lich King", "Christie Golden", "Pocket Books", 2009, "Fantasy", "Very Good");
+            bookData.createBook("The Iron Druid Chronicles: Hounded", "Kevin Hearne", "Del Rey Books", 2011, "Urban Fantasy", "Very Bad");
+            bookData.createBook("The Black Cat", "Edgar Allan Poe", "United States Saturday Post", 1843, "Horror", "Good");
+
+            pref.edit().putBoolean(SHARED_PREFERENCE_FIRST_RUN, false).commit();
+        }
 
         List<Book> values = bookData.getAllBooks();
 
@@ -63,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
         Book book;
         switch (view.getId()) {
             case R.id.add: {
-                // PH for title! | When going back should have a way to know which title was there previous to this or depending on fragment to show...
-                setTitle("Register a New Book");
-
                 FragmentManager mgr = getFragmentManager();
                 Fragment frag = mgr.findFragmentById(R.id.fragmentAddBook);
 
@@ -100,6 +114,24 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         //adapter.notifyDataSetChanged();
+    }
+
+    public void resetAddFields(View view) {
+        EditText publisherET, catET, authorET, titleET, yearET;
+        RatingBar peRB = (RatingBar) findViewById(R.id.ratingBarPersonalEvaluation);
+
+        publisherET = (EditText)findViewById(R.id.editTextPublisher);
+        catET = (EditText)findViewById(R.id.editTextCategory);
+        authorET = (EditText)findViewById(R.id.editTextAuthor);
+        titleET = (EditText)findViewById(R.id.editTextTitle);
+        yearET = (EditText)findViewById(R.id.editTextYear);
+
+        peRB.setRating(3.0f);
+        publisherET.setText("");
+        authorET.setText("");
+        titleET.setText("");
+        catET.setText("");
+        yearET.setText("");
     }
 
     public void registerBook(View view) {
@@ -146,6 +178,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (res.isEmpty()) {
+            BooksByCategoryFragment booksCat = (BooksByCategoryFragment)getFragmentManager().findFragmentById(R.id.fragmentBooksByCategory);
+            final BookRVAdapter adapter = (BookRVAdapter)booksCat.GetRecyclerView().getAdapter();
+            final List<Object> initList = adapter.GetElements();
+
             final RatingBar peRB = (RatingBar) findViewById(R.id.ratingBarPersonalEvaluation);
             String auxAuth, auxPublisher;
 
@@ -169,6 +205,12 @@ public class MainActivity extends AppCompatActivity {
             catET.setText("");
             yearET.setText("");
 
+            // Update Recycler View of Category (should update all other lists, like the one of tittles also!)
+            List<Object> newList = bookData.CreateListByCategory();
+            final int pos = newList.indexOf(b);
+            adapter.SetElements(newList);
+            adapter.notifyItemInserted(pos);
+
             // Snackbar with Undo action
             Snackbar snackbar = Snackbar
                     .make(findViewById(R.id.coordinatorLayoutAddBook), title + " has been registered.", Snackbar.LENGTH_INDEFINITE)
@@ -178,9 +220,27 @@ public class MainActivity extends AppCompatActivity {
                             bookData.deleteBook(b.getId());
                             Toast.makeText(inst, b.getTitle() + " has been removed.", Toast.LENGTH_LONG).show();
 
-                            // Snackbar with Undo action
+                            boolean onlyInCat;
+
+                            if (b.getCategory().isEmpty())
+                                onlyInCat = initList.indexOf("No-category") == -1;
+                            else
+                                onlyInCat = initList.indexOf(b.getCategory()) == -1;
+
+                            adapter.SetElements(initList);
+
+                            adapter.notifyItemRemoved(pos);
+
+                            if (onlyInCat) {
+                                adapter.notifyItemRemoved(pos - 1);
+                                adapter.notifyItemRangeChanged(pos - 1, initList.size() - pos - 1);
+                            }
+                            else
+                                adapter.notifyItemRangeChanged(pos, initList.size() - pos);
+
+                            // Snackbar with Restore action
                             Snackbar snackbar = Snackbar
-                                    .make(findViewById(R.id.coordinatorLayoutAddBook),"Refill fields with previous data?", Snackbar.LENGTH_INDEFINITE)
+                                    .make(findViewById(R.id.coordinatorLayoutAddBook),"Restore Add fields with previous data?", Snackbar.LENGTH_INDEFINITE)
                                     .setAction("YES", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -217,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                                     });
 
                             // Changing message text color
-                            snackbar.setActionTextColor(Color.LTGRAY);
+                            snackbar.setActionTextColor(Color.GRAY);
 
                             // Changing action button text color
                             View sbView = snackbar.getView();
@@ -242,6 +302,31 @@ public class MainActivity extends AppCompatActivity {
 
     public BookData GetBookData() {
         return bookData;
+    }
+
+    public void DeleteBookList(final List<Book> books) {
+        final boolean multDelete = books.size() > 1;
+
+        bookData.deleteBooks(books);
+
+        // Make snackbar to allow the UNDO action, registering again all the books removed, those books are in books (so the listener will use the received list
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.coordinatorLayoutAddBook),"Element/s removed", Snackbar.LENGTH_INDEFINITE)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        bookData.createBooks(books);
+                    }
+                });
+
+        // Changing message text color
+        snackbar.setActionTextColor(Color.LTGRAY);
+
+        // Changing action button text color
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.WHITE);
+        snackbar.show();
     }
 
     @Override
